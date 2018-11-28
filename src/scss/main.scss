@@ -1,0 +1,29 @@
+@import "~bootstrap/scss/bootstrap";
+@font-face {
+  font-family: myFirstFont;
+
+}
+* {
+  &, &:before, &:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+}
+
+html {
+    font-family: Arial, sans-serif;
+
+  .product_special_price{
+    color:red;
+  }
+  }
+
+
+
+
+  .product-image {
+    max-height: 200px;
+    object-fit: contain;
+  }
+
