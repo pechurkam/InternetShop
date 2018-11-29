@@ -8,7 +8,7 @@ window.$ = $;
 
 
 import 'bootstrap/js/dist/dropdown';
-
+import 'bootstrap/js/dist/modal';
 let _makeProduct = require('./modules/product-html');
 jQuery.ajax({
     url: 'https://nit.tron.net.ua/api/product/list',
@@ -27,7 +27,7 @@ jQuery.ajax({
 });
 
 let _listCategories = ({id, name}) => {
-    return ($('<a class="dropdown-item" href="#" id="${id}"></a>').text(name));
+    return ($('<a class="dropdown-item" href="#" id="' + id + '"></a>').text(name));
 };
 jQuery.ajax({
     url: 'https://nit.tron.net.ua/api/category/list',
@@ -38,6 +38,7 @@ jQuery.ajax({
         // console.log(json);
         console.table(json);
         json.forEach(category => $('.dropdown-menu').append(_listCategories(category)));
+        $(".dropdown-item").on('click', dropdownFunction);
         console.log('Added to list');
     },
     error: function (xhr) {
@@ -46,34 +47,16 @@ jQuery.ajax({
 });
 
 
-function cartFunction() {
+/*function cartFunction() {
 
     let a = parseInt(document.getElementById("count").innerText);
     a++;
     document.getElementById("count").innerText = a.toString();
-}
+} */
 
-function orderFunc() {
-    $(".product-grid").empty();
-    $('#zakaz').html('<form>\n' +
-        '  <div class="form-group">\n' +
-        '    <label for="exampleInputEmail1">Email address</label>\n' +
-        '    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">\n' +
-        '    <small id="emailHelp" class="form-text text-muted">We\'ll never share your email with anyone else.</small>\n' +
-        '  </div>\n' +
-        '  <div class="form-group">\n' +
-        '    <label for="exampleInputPassword1">Password</label>\n' +
-        '    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">\n' +
-        '  </div>\n' +
-        '  <div class="form-group form-check">\n' +
-        '    <input type="checkbox" class="form-check-input" id="exampleCheck1">\n' +
-        '    <label class="form-check-label" for="exampleCheck1">Check me out</label>\n' +
-        '  </div>\n' +
-        '  <button type="submit" class="btn btn-primary">Submit</button>\n' +
-        '</form>')
-}
-let num = $("dropdown-item").attr("id");
-function myFunction() {
+
+function dropdownFunction() {
+    let num = $(this).attr("id");
     $(".product-grid").empty();
     jQuery.ajax({
 
@@ -94,6 +77,14 @@ function myFunction() {
     });
 
 }
-$("dropdown-item").on('click', myFunction);
+
+
+$(".dropdown-item").on('click', dropdownFunction);
 $('#cartBut').on('click', cartFunction);
-$('#cart').on('click', orderFunc);
+$('#myModal').on('click',function(e){
+    e.preventDefault();
+   $('#myModal').modal('show');
+})
+
+
+

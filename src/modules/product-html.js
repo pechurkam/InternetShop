@@ -15,7 +15,7 @@ let _makeHtml = ({
         $product.append($(`<span class="product_special_price">`).text(special_price));
     }
 
-    $product.append($(`<button type="button" href="#cartBut" class="btn btn-primary btn-sm">`).text("Add to cart"));
+    $product.append($(`<button type="button" href="#cartBut" class="btn btn-default btn-sm mt-2 mb-2" style="color : white; background-color: black; ">`).text("Add to cart"));
     //$product.append($('<span class="product-description">').text(description));
     return $product;
 };

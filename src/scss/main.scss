@@ -26,4 +26,20 @@ html {
     max-height: 200px;
     object-fit: contain;
   }
+.container {
+  margin-top: 100px;
+}
+.footer .container{
+  margin-bottom: 30px;
+  //border-top: 3px solid black;
+}
+#border  {
+  border-top: 1px solid black;
+  left:0px;
+}
+
+.orderForm{
+  margin-left: 50px;
+  margin-right: 50px;
+}
 
