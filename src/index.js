@@ -3,15 +3,18 @@ import './scss/main.scss';
 console.log(`The time is ${new Date()}`);
 //import 'bootstrap/dist/css/bootstrap.min.css';  // only minified CSS
 import $ from 'jquery';
+
 window.jQuery = $;
 window.$ = $;
 
 
 import 'bootstrap/js/dist/dropdown';
 import 'bootstrap/js/dist/modal';
+
 let _makeProduct = require('./modules/product-html');
+let _productInCart = require('./modules/productInCart');
 jQuery.ajax({
-    url: 'https://nit.tron.net.ua/api/product/list',
+    url: 'http://localhost:5000/api/product/list',
     method: 'get',
     dataType: 'json',
     success: function (json) {
@@ -30,7 +33,7 @@ let _listCategories = ({id, name}) => {
     return ($('<a class="dropdown-item" href="#" id="' + id + '"></a>').text(name));
 };
 jQuery.ajax({
-    url: 'https://nit.tron.net.ua/api/category/list',
+    url: 'http://localhost:5000/api/category/list',
     method: 'get',
     dataType: 'json',
     success: function (json) {
@@ -45,7 +48,7 @@ jQuery.ajax({
         alert("An error occured: " + xhr.status + " " + xhr.statusText);
     },
 });
-
+// ADD TO CART
 
 /*function cartFunction() {
 
@@ -60,7 +63,7 @@ function dropdownFunction() {
     $(".product-grid").empty();
     jQuery.ajax({
 
-        url: 'https://nit.tron.net.ua/api/product/list/category/' + num,
+        url: 'http://localhost:5000/api/product/list/category/' + num,
         method: 'get',
         dataType: 'json',
         success: function (json) {
@@ -78,13 +81,169 @@ function dropdownFunction() {
 
 }
 
+/*function clearCart() {
+    var count = parseInt(localStorage.getItem('cart-size')) || 0;
+    for (var i = 1; i <= count; i++) {
+        localStorage.removeItem('cart-item-' + i)
+    }
+    localStorage.removeItem('cart-size');
+}
+function addCartItem(itemId) {
+    //проверить есть ли в сторедже элемент с этим айди,
+    //если есть - то меняем цифру
 
+
+    var count = parseInt(localStorage.getItem('cart-size')) || 0;
+    var count1=localStorage.getItem('cart-item-' + (count + 1));
+
+    localStorage.setItem('cart-item-' + (count + 1),{ id:itemId, count : });
+    localStorage.setItem('cart-size', count + 1);
+}
+function getCartItems() {
+    var items = [];
+    var count = parseInt(localStorage.getItem('cart-size')) || 0;
+
+    for (var i = 1; i <= count; i++) {
+        var itemId = localStorage.getItem('cart-item-' + i);
+        items.push(parseInt(itemId));
+    }
+
+    return items;
+}*/
+let arr = [];
+
+
+//var fruits = [];
+//var test1;
+let c = 0;
+//КНОПКА ДОДАТИ ДО КОШИКА
+$(document).on('click', '.addToCart', function () {
+    var num2 = $(this).closest('.card').data('product-id');
+    //addCartItem(num2);
+    // test1 = num2;
+    jQuery.ajax({
+        url: `http://localhost:5000/api/product/${num2}`,
+        method: 'get',
+        dataType: 'json',
+        success: function (json) {
+            /*if(arr.contains(itemId.name)){
+
+            }*/
+            c++;
+            $(".prodInCartAmount").empty();
+            ($(`<div>${c}</div>`)).appendTo(".prodInCartAmount");
+            let kr = true;
+            for (let l = 0; l < arr.length; l++) {
+                if (arr[l].itemId.id == num2) {
+
+                    console.log(arr[l].itemCount);
+                    arr[l].itemCount++;
+                    console.log(arr[l].itemCount);
+                    kr = false;
+                    break;
+                }
+
+            }
+            if (kr)
+                arr.push({itemId: json, itemCount: 1});
+            //_productInCart(json);
+
+        },
+        error: function (xhr) {
+            alert("An error occured: " + xhr.status + " " + xhr.statusText);
+        },
+    });
+
+
+});
+
+
+//dropdown
 $(".dropdown-item").on('click', dropdownFunction);
-$('#cartBut').on('click', cartFunction);
-$('#myModal').on('click',function(e){
-    e.preventDefault();
-   $('#myModal').modal('show');
-})
+//DETAILS
+let _makeDesc = require('./modules/productDescription');
+$(document).on('click', '.details', function () {
+    // let num = $(this).attr("data-product-id");
+    let num = $(this).closest('.card').data('product-id');
+    console.log(num);
+    $(".modal-header").empty();
+    $(".modal-body").empty();
+    $(".modal-footer").empty();
+    jQuery.ajax({
+        url: `http://localhost:5000/api/product/${num}`,
+        method: 'get',
+        dataType: 'json',
+        success: function (json) {
+            _makeDesc(json);
+
+        },
+        error: function (xhr) {
+            alert("An error occured: " + xhr.status + " " + xhr.statusText);
+        },
+    });
+    $('#myModal').modal('show');
+});
+
+
+$('.decBut').on('click', function () {
+
+
+});
+
+
+$('.All').on('click', function () {
+    $(".product-grid").empty();
+    jQuery.ajax({
+        url: 'http://localhost:5000/api/product/list',
+        method: 'get',
+        dataType: 'json',
+        success: function (json) {
+            console.log('Loaded via AJAX!');
+            // console.log(json);
+            console.table(json);
+            json.forEach(product => $('.product-grid').append(_makeProduct(product)));
+            console.log('Added to grid');
+        },
+        error: function (xhr) {
+            alert("An error occured: " + xhr.status + " " + xhr.statusText);
+        },
+    });
+});
+
+
+let _makeOrder = require('./modules/CartModal');
+//КНОПКА КОШИКА
+$('.cartMine').on('click', function () {
+
+    $(".modal-header").empty();
+    ($(`
+    <div class="cartHeader">Cart</div>
+    <button type="button" class="close " style="margin-left: 5px" data-dismiss="modal">&times;</button>`)).appendTo(".modal-header");
+    $(".modal-body").empty();
+    $(".modal-footer").empty();
+
+    arr.forEach(_productInCart);
+
+
+    jQuery.ajax({
+        url: 'http://localhost:5000/api/product/list/category/4', // tak i dolzhno byt' 4?
+        method: 'get',
+        dataType: 'json',
+        success: function (json) {
+            _makeOrder(json);
+
+        },
+        error: function (xhr) {
+            alert("An error occured: " + xhr.status + " " + xhr.statusText);
+        },
+    });
+    $('#myModal').modal('show');
+});
+
+
+
+
+
 
 
 
