@@ -1,12 +1,16 @@
-let _makeOrder = ({ }) => {
+let _makeOrder = ({}) => {
 
-
-($(`  <form class="orderForm">
+//<button type="button"  class="totalPriceBut btn btn-warning btn-sm">Maybe you want to know total price?))</button>
+    ($(`  
+  <div class="totPrice">
+  <div style="margin-top: 5px; text-decoration: underline; text-decoration-color: #c69500" class="totPrice-count">Total price: 0</div>
+</div>
+  <form class="orderForm">
                     
                     <label for="formHeader">Fill the form to order these products. </label>
                     <div class="form-group">
                       
-                        <input type="text" class="form-control" placeholder="Your name">
+                        <input type="text" class="form-control" id="clientName" placeholder="Your name">
                     </div>
                     <div class="form-group">
                       
@@ -25,7 +29,7 @@ let _makeOrder = ({ }) => {
                     
                     
                     
-                    <button type="submit" class="btn btn-info btn-sm" style="margin-bottom: 10px; float: right">Submit</button>
+                    <button type="submit" class="submitButton btn btn-info btn-sm" style="margin-bottom: 10px; float: right">Submit</button>
                 </form>`)).appendTo(".modal-body");
 
 

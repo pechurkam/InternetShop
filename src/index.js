@@ -14,7 +14,7 @@ import 'bootstrap/js/dist/modal';
 let _makeProduct = require('./modules/product-html');
 let _productInCart = require('./modules/productInCart');
 jQuery.ajax({
-    url: 'http://localhost:5000/api/product/list',
+    url: 'https://nit.tron.net.ua/api/product/list',
     method: 'get',
     dataType: 'json',
     success: function (json) {
@@ -33,7 +33,7 @@ let _listCategories = ({id, name}) => {
     return ($('<a class="dropdown-item" href="#" id="' + id + '"></a>').text(name));
 };
 jQuery.ajax({
-    url: 'http://localhost:5000/api/category/list',
+    url: 'https://nit.tron.net.ua/api/category/list',
     method: 'get',
     dataType: 'json',
     success: function (json) {
@@ -48,22 +48,13 @@ jQuery.ajax({
         alert("An error occured: " + xhr.status + " " + xhr.statusText);
     },
 });
-// ADD TO CART
-
-/*function cartFunction() {
-
-    let a = parseInt(document.getElementById("count").innerText);
-    a++;
-    document.getElementById("count").innerText = a.toString();
-} */
-
 
 function dropdownFunction() {
     let num = $(this).attr("id");
     $(".product-grid").empty();
     jQuery.ajax({
 
-        url: 'http://localhost:5000/api/product/list/category/' + num,
+        url: 'https://nit.tron.net.ua/api/product/list/category/' + num,
         method: 'get',
         dataType: 'json',
         success: function (json) {
@@ -122,7 +113,7 @@ $(document).on('click', '.addToCart', function () {
     //addCartItem(num2);
     // test1 = num2;
     jQuery.ajax({
-        url: `http://localhost:5000/api/product/${num2}`,
+        url: `https://nit.tron.net.ua/api/product/${num2}`,
         method: 'get',
         dataType: 'json',
         success: function (json) {
@@ -170,7 +161,7 @@ $(document).on('click', '.details', function () {
     $(".modal-body").empty();
     $(".modal-footer").empty();
     jQuery.ajax({
-        url: `http://localhost:5000/api/product/${num}`,
+        url: `https://nit.tron.net.ua/api/product/${num}`,
         method: 'get',
         dataType: 'json',
         success: function (json) {
@@ -185,16 +176,10 @@ $(document).on('click', '.details', function () {
 });
 
 
-$('.decBut').on('click', function () {
-
-
-});
-
-
 $('.All').on('click', function () {
     $(".product-grid").empty();
     jQuery.ajax({
-        url: 'http://localhost:5000/api/product/list',
+        url: 'https://nit.tron.net.ua/api/product/list',
         method: 'get',
         dataType: 'json',
         success: function (json) {
@@ -213,6 +198,7 @@ $('.All').on('click', function () {
 
 let _makeOrder = require('./modules/CartModal');
 //КНОПКА КОШИКА
+let kD = 0;
 $('.cartMine').on('click', function () {
 
     $(".modal-header").empty();
@@ -224,23 +210,101 @@ $('.cartMine').on('click', function () {
 
     arr.forEach(_productInCart);
 
+if(arr.length == 0){
+    ($(`<div style="margin-top: 5px">Your cart is empty(</div>`)).appendTo('.modal-body');
+}else {
+
+
+    for(let i=0; i< arr.length; i++){
+
+        kD +=arr[i].itemId.price*arr[i].itemCount;
+
+    }
+    console.log(kD);
+
 
     jQuery.ajax({
-        url: 'http://localhost:5000/api/product/list/category/4', // tak i dolzhno byt' 4?
+        url: 'https://nit.tron.net.ua/api/product/list/category/4',
         method: 'get',
         dataType: 'json',
         success: function (json) {
             _makeOrder(json);
+            $('.totPrice > .totPrice-count').text('Total price: ' + kD);
 
         },
         error: function (xhr) {
             alert("An error occured: " + xhr.status + " " + xhr.statusText);
         },
     });
+
+}
     $('#myModal').modal('show');
 });
 
+$(document).on('click', '.deleteButton', function () {
 
+    let num = $(this).attr("id");
+    for(let i=0; i< arr.length; i++){
+        console.log(arr[i].itemId.id + ' ' + num);
+        if (arr[i].itemId.id === num) {
+            kD -= arr[i].itemId.price * arr[i].itemCount;
+            c-=arr[i].itemCount;
+            $(".prodInCartAmount").empty();
+            $(`<div>${c}</div>`).appendTo(".prodInCartAmount");
+            console.log('here ' + arr[i].itemId.price + ' ' + kD + ' ' + arr[i].itemCount);
+            arr.splice(i, 1);
+            break;
+        }
+    }
+    $('.totPrice > .totPrice-count').text('Total price: ' + kD);
+
+    console.log(arr);
+    $(this).parent().parent().parent().remove();
+    //('.totPrice').empty();
+});
+
+//$(document).on('click', '.totalPriceBut', function () {
+//});
+
+/*$(document).on('click', '.submitButton', function () {
+    let $name = $('#clientName').val();
+    let $email = $('#Email').val();
+    let $tel = $('#clientPhone').val();
+    let $data = {
+        token: 'quWoyyboJMT34nk_rxO_',
+        name: $name,
+        phone: $tel,
+        email: $email,
+    };
+    arr.forEach(order => {
+        $data['arr[${order.itemId.id}]'] = order.itemCount;
+    });
+
+    $.post('https://nit.tron.net.ua/api/order/add',
+        {
+            token: 'quWoyyboJMT34nk_rxO_',
+            name: $name,
+            phone: $tel,
+            email: $email,
+        },
+
+
+            success: function (json) {
+                console.log(json);
+                console.log('Success');
+                arr.length = 0;
+                // localStorage.removeItem("cart");
+                $('modal-header').empty();
+                $('modal-body').empty();
+                $('modal-footer').empty();
+                $('<div>Thank you for your order!</div>').appendTo('modal-body')
+            },
+            error: function (xhr) {
+                alert("An error occured: " + xhr.status + " " + xhr.statusText);
+            },
+        });
+    $('#myModal').modal('show');
+});*/
 
 
 
