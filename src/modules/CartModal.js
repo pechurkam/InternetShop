@@ -17,10 +17,7 @@ let _makeOrder = ({}) => {
                         <input type="tel" class="form-control" id="clientPhone" placeholder="Your phone number">
                    
                     </div>
-                   <!-- <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                    </div> -->
+                   
                     <div class="form-group">
                       
                         <input type="email" class="form-control" id="Email" aria-describedby="emailHelp" placeholder="Your email">
