@@ -303,7 +303,7 @@ $(document).on('click', '.submitButton', function (e) {
                 c=0;
                 kD=0;
                 $(`<div class="successfulOrder">Thank you for your order!</div><div style="margin-left: 60px; margin-top: 10px">
-    <img src="../docs/img/cuteBoy.jpg" width="90" height="auto" alt="cuteBoy">
+    <img src="img/cuteBoy.jpg" width="90" height="auto" alt="cuteBoy">
 </div>`).appendTo('.modal-body');
                 errAmount=0;
 
