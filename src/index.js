@@ -302,9 +302,7 @@ $(document).on('click', '.submitButton', function (e) {
                 $(".prodInCartAmount").text('0');
                 c=0;
                 kD=0;
-                $(`<div class="successfulOrder">Thank you for your order!</div><div style="margin-left: 60px; margin-top: 10px">
-    <img src="img/cuteBoy.jpg" width="90" height="auto" alt="cuteBoy">
-</div>`).appendTo('.modal-body');
+                $(`<div class="successfulOrder">Thank you for your order!</div>`).appendTo('.modal-body');
                 errAmount=0;
 
             }
