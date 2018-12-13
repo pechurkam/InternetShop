@@ -147,6 +147,7 @@ $(document).on('click', '.addToCart', function () {
 
 
 });
+
 $(document).on('click', '.addToCartDesc', function () {
     var num2 = $(this).data('product-id');
     //addCartItem(num2);
@@ -156,9 +157,7 @@ $(document).on('click', '.addToCartDesc', function () {
         method: 'get',
         dataType: 'json',
         success: function (json) {
-            /*if(arr.contains(itemId.name)){
 
-            }*/
             c++;
             $(".prodInCartAmount").empty();
             ($(`<div>${c}</div>`)).appendTo(".prodInCartAmount");
@@ -186,8 +185,6 @@ $(document).on('click', '.addToCartDesc', function () {
 
 
 });
-
-
 
 
 //dropdown
@@ -307,7 +304,8 @@ $(document).on('click', '.deleteButton', function () {
 //$(document).on('click', '.totalPriceBut', function () {
 //});
 let errAmount = 0;
-$(document).on('click', '.submitButton', function () {
+$(document).on('click', '.submitButton', function (e) {
+    e.preventDefault();
     let $name = $('#clientName').val();
     let $email = $('#Email').val();
     let $tel = $('#clientPhone').val();
