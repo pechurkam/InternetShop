@@ -71,41 +71,7 @@ function dropdownFunction() {
     });
 
 }
-
-/*function clearCart() {
-    var count = parseInt(localStorage.getItem('cart-size')) || 0;
-    for (var i = 1; i <= count; i++) {
-        localStorage.removeItem('cart-item-' + i)
-    }
-    localStorage.removeItem('cart-size');
-}
-function addCartItem(itemId) {
-    //проверить есть ли в сторедже элемент с этим айди,
-    //если есть - то меняем цифру
-
-
-    var count = parseInt(localStorage.getItem('cart-size')) || 0;
-    var count1=localStorage.getItem('cart-item-' + (count + 1));
-
-    localStorage.setItem('cart-item-' + (count + 1),{ id:itemId, count : });
-    localStorage.setItem('cart-size', count + 1);
-}
-function getCartItems() {
-    var items = [];
-    var count = parseInt(localStorage.getItem('cart-size')) || 0;
-
-    for (var i = 1; i <= count; i++) {
-        var itemId = localStorage.getItem('cart-item-' + i);
-        items.push(parseInt(itemId));
-    }
-
-    return items;
-}*/
 let arr = [];
-
-
-//var fruits = [];
-//var test1;
 let c = 0;
 //КНОПКА ДОДАТИ ДО КОШИКА
 $(document).on('click', '.addToCart', function () {
@@ -337,7 +303,7 @@ $(document).on('click', '.submitButton', function (e) {
                 c=0;
                 kD=0;
                 $(`<div class="successfulOrder">Thank you for your order!</div><div style="margin-left: 60px; margin-top: 10px">
-    <img src="../img/cuteBoy.jpg" width="90" height="auto" alt="cuteBoy">
+    <img src="../docs/img/cuteBoy.jpg" width="90" height="auto" alt="cuteBoy">
 </div>`).appendTo('.modal-body');
                 errAmount=0;
 
