@@ -265,8 +265,8 @@ $(document).on('click', '.deleteButton', function () {
 
 //$(document).on('click', '.totalPriceBut', function () {
 //});
-
-/*$(document).on('click', '.submitButton', function () {
+let errAmount = 0;
+$(document).on('click', '.submitButton', function () {
     let $name = $('#clientName').val();
     let $email = $('#Email').val();
     let $tel = $('#clientPhone').val();
@@ -276,35 +276,57 @@ $(document).on('click', '.deleteButton', function () {
         phone: $tel,
         email: $email,
     };
-    arr.forEach(order => {
-        $data['arr[${order.itemId.id}]'] = order.itemCount;
+    console.log(arr[0]);
+    arr.forEach(product => {
+        $data[`products[${product.itemId.id}]`] = product.itemCount;
     });
 
-    $.post('https://nit.tron.net.ua/api/order/add',
-        {
-            token: 'quWoyyboJMT34nk_rxO_',
-            name: $name,
-            phone: $tel,
-            email: $email,
+    jQuery.ajax({
+        url: "https://nit.tron.net.ua/api/order/add",
+        method: 'post',
+        data: $data,
+        dataType: 'json',
+        success: function (json) {
+            if (json.status === "success") {
+                $(".modal-header").empty();
+                $(".modal-body").empty();
+                $(".modal-footer").empty();
+                arr.splice(0, arr.length);
+                //$totalPrice = Number(0);    ???
+                $(".prodInCartAmount").text('0');
+                c=0;
+                kD=0;
+                $(`<div class="successfulOrder">Thank you for your order!</div><div style="margin-left: 60px; margin-top: 10px">
+    <img src="../img/cuteBoy.jpg" width="90" height="auto" alt="cuteBoy">
+</div>`).appendTo('.modal-body');
+                errAmount=0;
+                //arr.length = 0;
+            }
+            else {
+                if(errAmount==0) {
+                    console.log(json);
+                    for (let key in json.errors) {
+                        json.errors[key].forEach(err => $(`.modal-body`).append($(`<div style="color:darkred">`).text(err)));
+                    }
+                }
+                errAmount++;
+
+            }
+            $("#myModal").modal('show');
         },
+        error:
+            function (xhr) {
+                alert("An error occured: " + xhr.status + json);
+            },
+    });
 
 
-            success: function (json) {
-                console.log(json);
-                console.log('Success');
-                arr.length = 0;
-                // localStorage.removeItem("cart");
-                $('modal-header').empty();
-                $('modal-body').empty();
-                $('modal-footer').empty();
-                $('<div>Thank you for your order!</div>').appendTo('modal-body')
-            },
-            error: function (xhr) {
-                alert("An error occured: " + xhr.status + " " + xhr.statusText);
-            },
-        });
-    $('#myModal').modal('show');
-});*/
+});
+
+
+
+
+
 
 
 
