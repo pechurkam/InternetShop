@@ -147,6 +147,47 @@ $(document).on('click', '.addToCart', function () {
 
 
 });
+$(document).on('click', '.addToCartDesc', function () {
+    var num2 = $(this).data('product-id');
+    //addCartItem(num2);
+    // test1 = num2;
+    jQuery.ajax({
+        url: `https://nit.tron.net.ua/api/product/${num2}`,
+        method: 'get',
+        dataType: 'json',
+        success: function (json) {
+            /*if(arr.contains(itemId.name)){
+
+            }*/
+            c++;
+            $(".prodInCartAmount").empty();
+            ($(`<div>${c}</div>`)).appendTo(".prodInCartAmount");
+            let kr = true;
+            for (let l = 0; l < arr.length; l++) {
+                if (arr[l].itemId.id == num2) {
+
+                    console.log(arr[l].itemCount);
+                    arr[l].itemCount++;
+                    console.log(arr[l].itemCount);
+                    kr = false;
+                    break;
+                }
+
+            }
+            if (kr)
+                arr.push({itemId: json, itemCount: 1});
+            //_productInCart(json);
+
+        },
+        error: function (xhr) {
+            alert("An error occured: " + xhr.status + " " + xhr.statusText);
+        },
+    });
+
+
+});
+
+
 
 
 //dropdown
@@ -276,7 +317,7 @@ $(document).on('click', '.submitButton', function () {
         phone: $tel,
         email: $email,
     };
-    console.log(arr[0]);
+
     arr.forEach(product => {
         $data[`products[${product.itemId.id}]`] = product.itemCount;
     });
@@ -286,13 +327,14 @@ $(document).on('click', '.submitButton', function () {
         method: 'post',
         data: $data,
         dataType: 'json',
+
         success: function (json) {
             if (json.status === "success") {
                 $(".modal-header").empty();
                 $(".modal-body").empty();
                 $(".modal-footer").empty();
                 arr.splice(0, arr.length);
-                //$totalPrice = Number(0);    ???
+
                 $(".prodInCartAmount").text('0');
                 c=0;
                 kD=0;
@@ -300,7 +342,7 @@ $(document).on('click', '.submitButton', function () {
     <img src="../img/cuteBoy.jpg" width="90" height="auto" alt="cuteBoy">
 </div>`).appendTo('.modal-body');
                 errAmount=0;
-                //arr.length = 0;
+
             }
             else {
                 if(errAmount==0) {
@@ -312,7 +354,8 @@ $(document).on('click', '.submitButton', function () {
                 errAmount++;
 
             }
-            $("#myModal").modal('show');
+
+            $('#myModal').modal('show');
         },
         error:
             function (xhr) {
